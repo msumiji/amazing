@@ -116,6 +116,7 @@ class MazeGenerator:
         self.obstacle_cells.clear()
 
         self.validate_and_place_42()
+        self.validate_entry_exit()
 
         visited = [[False for _ in range(self.width)] for _ in range(self.height)]
 
@@ -331,51 +332,25 @@ class MazeGenerator:
                     self.grid[y][x] &= ~wall_bit
                     self.grid[ny][nx] &= ~opp_bit
 
-    #def creates_3x3_open_space(
-    #    self, x: int, y: int,
-    #    wall_bit: int
-    #) -> bool:
+    def validate_entry_exit(self) -> None:
 
-    #    dx = 1 if wall_bit == EAST else -1 if wall_bit == WEST else 0
-    #    dy = 1 if wall_bit == SOUTH else -1 if wall_bit == NORTH else 0
+        for name, (x, y) in [
+            ("ENTRY", self.entry),
+            ("EXIT", self.exit)
+        ]:
+            # 迷路の範囲内か確認
+            if not (0 <= x < self.width and 0 <= y < self.height):
+                raise ValueError(
+                    f"{name} coordinate ({x},{y}) is outside "
+                    f"the maze boundaries ({self.width}x{self.height})."
+                )
 
-    #    nx, ny = x + dx, y + dy
-
-    #    # 仮に壁を取り除く
-    #    self.grid[y][x] &= ~wall_bit
-    #    opposite = {
-    #        NORTH: SOUTH,
-    #        EAST: WEST,
-    #        SOUTH: NORTH,
-    #        WEST: EAST
-    #    }[wall_bit]
-
-    #    self.grid[ny][nx] &= ~opposite
-
-    #    creates_space = False
-
-    ## 3x3の範囲を調べる
-    #    for sy in range(max(0, y - 2), min(self.height - 2, y) + 1):
-    #        for sx in range(max(0, x - 2), min(self.width - 2, x) + 1):
-
-    #            if all(
-    #                (cx, cy) not in self.obstacle_cells
-    #                and self.grid[cy][cx] == 0
-    #                for cy in range(sy, sy + 3)
-    #                for cx in range(sx, sx + 3)
-    #            ):
-    #                creates_space = True
-    #                break
-
-    #        if creates_space:
-    #            break
-
-    #    # 元に戻す
-    #    self.grid[y][x] |= wall_bit
-    #    self.grid[ny][nx] |= opposite
-
-    #    return creates_space
-
+        # 42の障害物と重なっていないか確認
+            if (x, y) in self.obstacle_cells:
+                raise ValueError(
+                    f"{name} coordinate ({x},{y}) overlaps "
+                    "with the '42' pattern."
+                )
 
 def main() -> None:
     config_file = sys.argv[1] if len(sys.argv) > 1 else "config.txt"
