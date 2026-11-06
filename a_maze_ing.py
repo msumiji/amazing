@@ -81,32 +81,62 @@ class MazeGenerator:
         return width, height, perfect, entry, exit_coord, output_file
 
     def validate_and_place_42(self) -> bool:
-        """
-        '42' パターンを配置可能か検証し、迷路の中央に配置する。
-        """
+
         pattern_width = 7
         pattern_height = 5
 
-        if self.width < pattern_width + 2 or self.height < pattern_height + 2:
+        # 迷路が小さすぎる場合
+        if (self.width < pattern_width + 2 or
+                self.height < pattern_height + 2):
             print(
-                f"Error: Maze size ({self.width}x{self.height}) "
-                "is too small to fit the '42' pattern.",
+                "Warning: '42' pattern has been omitted "
+                "due to insufficient maze size.",
                 file=sys.stderr
             )
-            print("Warning: '42' pattern has been omitted due to insufficient size.", file=sys.stderr)
             return False
 
+        # 迷路中央の配置位置（固定）
         start_x = (self.width - pattern_width) // 2
         start_y = (self.height - pattern_height) // 2
 
-        four_coords = [(0, 0), (0, 1), (0, 2), (1, 2), (2, 2), (2, 3), (2, 4)]
-        two_coords = [(4, 0), (5, 0), (6, 0), (6, 1), (4, 2), (5, 2), (6, 2), (4, 3), (4, 4), (5, 4), (6, 4)]
+        # 42の配置パターン
+        four_coords = [
+            (0, 0), (0, 1), (0, 2),
+            (1, 2), (2, 2), (2, 3), (2, 4)
+        ]
 
-        for dx, dy in four_coords + two_coords:
-            px, py = start_x + dx, start_y + dy
-            if py < self.height and px < self.width:
-                self.grid[py][px] = ALL_WALLS
-                self.obstacle_cells.add((px, py))
+        two_coords = [
+            (4, 0), (5, 0), (6, 0),
+            (6, 1),
+            (4, 2), (5, 2), (6, 2),
+            (4, 3),
+            (4, 4), (5, 4), (6, 4)
+        ]
+
+        pattern_coords = four_coords + two_coords
+
+        # 42を構成する実際の座標
+        cells = {
+            (start_x + dx, start_y + dy)
+            for dx, dy in pattern_coords
+        }
+
+        # ENTRYとEXITの座標
+        entry_exit_cells = {self.entry, self.exit}
+
+        # ENTRYまたはEXITと重なる場合
+        if cells & entry_exit_cells:
+            print(
+                "Warning: '42' pattern has been omitted "
+                "because ENTRY or EXIT overlaps with the '42' pattern.",
+                file=sys.stderr
+            )
+            return False
+
+        # 42を配置
+        for x, y in cells:
+            self.grid[y][x] = ALL_WALLS
+            self.obstacle_cells.add((x, y))
 
         return True
 
@@ -114,9 +144,8 @@ class MazeGenerator:
         """非再帰の深さ優先探索（DFS）を用いて迷路の通路を確実に掘り進める"""
         self.grid = [[ALL_WALLS for _ in range(self.width)] for _ in range(self.height)]
         self.obstacle_cells.clear()
-
-        self.validate_and_place_42()
         self.validate_entry_exit()
+        self.validate_and_place_42()
 
         visited = [[False for _ in range(self.width)] for _ in range(self.height)]
 
