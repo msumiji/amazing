@@ -34,8 +34,16 @@ class MazeGenerator:
     def __init__(self, config_path: str = "config.txt"):
         self.config_path = config_path
         config = self._load_config()
-        self.width, self.height, self.perfect = config[:3]
-        self.entry, self.exit, self.output_file = config[3:]
+        (
+            self.width,
+            self.height,
+            self.perfect,
+            self.entry,
+            self.exit,
+            self.output_file,
+            self.seed
+        ) = config
+        self.rng = random.Random(self.seed)
         self.grid: List[List[int]] = []
         self.obstacle_cells: Set[Tuple[int, int]] = set()
 
@@ -47,11 +55,11 @@ class MazeGenerator:
 
     def _load_config(
         self
-    ) -> Tuple[int, int, bool, Tuple[int, int], Tuple[int, int], str]:
+    ) -> Tuple[int, int, bool, Tuple[int, int], Tuple[int, int], str, int | None]:
         """設定ファイルを読み込んで幅、高さ、PERFECTフラグ、ENTRY、EXIT、出力ファイル名を取得"""
         config = configparser.ConfigParser()
         if not Path(self.config_path).exists():
-            return 9, 7, True, (0, 0), (8, 6), "output_maze.txt"
+            return 9, 7, True, (0, 0), (8, 6), "output_maze.txt", None
 
         config.read(self.config_path)
         section = config.sections()[0] if config.sections() else 'DEFAULT'
@@ -68,6 +76,7 @@ class MazeGenerator:
         )
         entry = tuple(map(int, entry_str.split(',')))
         exit_coord = tuple(map(int, exit_str.split(',')))
+        seed = config.getint(section, 'SEED', fallback=None)
 
         output_file = config.get(
             section,
@@ -78,10 +87,10 @@ class MazeGenerator:
         if not output_file:
             output_file = "output_maze.txt"
 
-        return width, height, perfect, entry, exit_coord, output_file
+        return width, height, perfect, entry, exit_coord, output_file, seed
 
     def validate_and_place_42(self) -> bool:
-
+        """42のパターンを配置する。ENTRYやEXITと重なる場合は位置を移動して配置する。"""
         pattern_width = 7
         pattern_height = 5
 
@@ -94,10 +103,6 @@ class MazeGenerator:
                 file=sys.stderr
             )
             return False
-
-        # 迷路中央の配置位置（固定）
-        start_x = (self.width - pattern_width) // 2
-        start_y = (self.height - pattern_height) // 2
 
         # 42の配置パターン
         four_coords = [
@@ -114,21 +119,45 @@ class MazeGenerator:
         ]
 
         pattern_coords = four_coords + two_coords
-
-        # 42を構成する実際の座標
-        cells = {
-            (start_x + dx, start_y + dy)
-            for dx, dy in pattern_coords
-        }
-
-        # ENTRYとEXITの座標
         entry_exit_cells = {self.entry, self.exit}
 
-        # ENTRYまたはEXITと重なる場合
-        if cells & entry_exit_cells:
+        # 標準の中央配置位置を基準にする
+        center_x = (self.width - pattern_width) // 2
+        center_y = (self.height - pattern_height) // 2
+
+        # 中央を最優先とし、重なる場合に備えて周囲の候補位置（オフセット）を生成する
+        candidates = [(center_x, center_y)]
+        for dx in range(-4, 5):
+            for dy in range(-4, 5):
+                nx, ny = center_x + dx, center_y + dy
+                # 迷路の枠内（外周を避ける範囲）に収まるかをチェック
+                if 1 <= nx <= self.width - pattern_width - 1 and 1 <= ny <= self.height - pattern_height - 1:
+                    if (nx, ny) not in candidates:
+                        candidates.append((nx, ny))
+
+        # 中央以外の候補をランダムにシャッフルして探索
+        other_candidates = candidates[1:]
+        self.rng.shuffle(other_candidates)
+        candidates = [candidates[0]] + other_candidates
+
+        placed = False
+        cells = set()
+        for start_x, start_y in candidates:
+            current_cells = {
+                (start_x + dx, start_y + dy)
+                for dx, dy in pattern_coords
+            }
+            # ENTRY または EXIT と重ならない場所を探す
+            if not (current_cells & entry_exit_cells):
+                cells = current_cells
+                placed = True
+                break
+
+        # どうしても置ける場所がない場合のみ省略
+        if not placed:
             print(
                 "Warning: '42' pattern has been omitted "
-                "because ENTRY or EXIT overlaps with the '42' pattern.",
+                "because no valid position was found without overlapping ENTRY or EXIT.",
                 file=sys.stderr
             )
             return False
@@ -171,7 +200,7 @@ class MazeGenerator:
                                 neighbors.append((nx, ny, wall_bit, opp_bit))
 
                     if neighbors:
-                        nx, ny, wall_bit, opp_bit = random.choice(neighbors)
+                        nx, ny, wall_bit, opp_bit = self.rng.choice(neighbors)
                         self.grid[cy][cx] &= ~wall_bit
                         self.grid[ny][nx] &= ~opp_bit
                         visited[ny][nx] = True
@@ -357,7 +386,7 @@ class MazeGenerator:
                         )
             # 候補からランダムに1つ選んで壁を取り除く
                 if candidates:
-                    nx, ny, wall_bit, opp_bit = random.choice(candidates)
+                    nx, ny, wall_bit, opp_bit = self.rng.choice(candidates)
                     self.grid[y][x] &= ~wall_bit
                     self.grid[ny][nx] &= ~opp_bit
 
