@@ -1,0 +1,8 @@
+[DEFAULT]
+WIDTH = 9
+HEIGHT = 9
+PERFECT = True
+ENTRY = 0,0
+EXIT = 8,8
+OUTPUT_FILE = output_maze.txt
+SEED = 42
