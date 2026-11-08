@@ -8,14 +8,14 @@ In this project, we will do the following:
 You can freely configure the maze size, as well as the start and goal positions, by changing the values in config.txt. Furthermore, by changing the value of “PERFECT” in config.txt, you can toggle between a perfect maze (where there is only one path between any two points) and an imperfect maze (where there are multiple paths between any two points). In this project, dead ends (locations surrounded by walls on three sides) are also eliminated in imperfect mazes (excluding the location of the “42” character).
 
 　Maze generation uses an algorithm called depth-first search (DFS). In this method, the program moves from the starting point to an adjacent unvisited cell and removes the wall in the direction of movement to create a path. This algorithm is explained below in accordance with the code for this project.
-1. Initialize all cells as walls (line 145).
-2. Place the character “42” (lines 146, 148).
-3. Manage visited cells (line 150).
-4. Start DFS from the starting point (lines 160, 161).
-5. Search for adjacent unvisited cells (lines 166–171).
-6. Randomly select one and remove the wall (lines 174–176).
-7. Mark the destination as visited and add it to the stack (lines 177, 178).
-8. If a dead end is reached, return (lines 179, 180).
+1. Initialize all cells as walls (line 175-178).
+2. Place the character “42” (lines 179, 181).
+3. Manage visited cells (line 183-186).
+4. Start DFS from the starting point (lines 196, 197).
+5. Search for adjacent unvisited cells (lines 202–209).
+6. Randomly select one and remove the wall (lines 212–214).
+7. Mark the destination as visited and add it to the stack (lines 215, 216).
+8. If a dead end is reached, return (lines 217, 218).
 
 　Another well-known algorithm for generating mazes is the “digging method.” In this method, a hole is dug from the starting point, and the program advances two squares at a time through unvisited areas. Consequently, the maze must have an odd number of rows and columns. Since this method cannot handle cases where the number of rows or columns is even as specified in config.txt, we determined it would be difficult to apply to this project; therefore, we adopted the DFS algorithm described above.
 
