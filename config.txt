@@ -1,0 +1,8 @@
+[MAZE]
+WIDTH = 10
+HEIGHT = 10
+PERFECT = True
+ENTRY = 0,0
+OUTPUT_FILE = baka.txt
+EXIT = 7,4
+SEED = 41
