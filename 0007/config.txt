@@ -1,4 +1,0 @@
-[DEFAULT]
-WIDTH = 20
-HEIGHT = 20
-PERFECT = True
