@@ -1,0 +1,8 @@
+[MAZE]
+WIDTH = 20
+HEIGHT = 20
+PERFECT = False
+ENTRY = 0,0
+OUTPUT_FILE = maze.txt
+EXIT = 19,19
+SEED = 41
