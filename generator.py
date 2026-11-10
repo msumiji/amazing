@@ -66,15 +66,14 @@ class MazeGenerator:
         config.read(self.config_path)
         section = config.sections()[0] if config.sections() else 'DEFAULT'
 
-        width = config.getint(section, 'WIDTH', fallback=15)
-        height = config.getint(section, 'HEIGHT', fallback=10)
-        perfect = config.getboolean(section, 'PERFECT', fallback=True)
+        width = config.getint(section, 'WIDTH')
+        height = config.getint(section, 'HEIGHT')
+        perfect = config.getboolean(section, 'PERFECT')
 
-        entry_str = config.get(section, 'ENTRY', fallback="0,0")
+        entry_str = config.get(section, 'ENTRY')
         exit_str = config.get(
             section,
-            'EXIT',
-            fallback=f"{width-1},{height-1}"
+            'EXIT'
         )
 
         entry_list = list(map(int, entry_str.split(',')))
@@ -83,12 +82,11 @@ class MazeGenerator:
         exit_list = list(map(int, exit_str.split(',')))
         exit_coord: Tuple[int, int] = (exit_list[0], exit_list[1])
 
-        seed = config.getint(section, 'SEED', fallback=None)
+        seed = config.getint(section, 'SEED')
 
         output_file = config.get(
             section,
-            "OUTPUT_FILE",
-            fallback="output_maze.txt"
+            "OUTPUT_FILE"
         ).strip()
 
         if not output_file:
@@ -319,7 +317,7 @@ class MazeGenerator:
         """16進数フォーマット等を含めて出力"""
         lines = []
         for row in self.grid:
-            hex_row = " ".join(format(cell, 'x') for cell in row)
+            hex_row = "".join(format(cell, 'x') for cell in row)
             lines.append(hex_row)
 
         lines.append("")

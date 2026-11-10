@@ -7,6 +7,8 @@ In this project, we will do the following:
 ・Display the start and goal positions, and show the shortest path from the start to the goal.
 You can freely configure the maze size, as well as the start and goal positions, by changing the values in config.txt. Furthermore, by changing the value of “PERFECT” in config.txt, you can toggle between a perfect maze (where there is only one path between any two points) and an imperfect maze (where there are multiple paths between any two points). In this project, dead ends (locations surrounded by walls on three sides) are also eliminated in imperfect mazes (excluding the location of the “42” character).
 
+## Algorithm
+### Maze Generation
 　Maze generation uses an algorithm called depth-first search (DFS). In this method, the program moves from the starting point to an adjacent unvisited cell and removes the wall in the direction of movement to create a path. This algorithm is explained below in accordance with the code for this project.
 1. Initialize all cells as walls (line 175-178).
 2. Place the character “42” (lines 179, 181).
@@ -19,13 +21,23 @@ You can freely configure the maze size, as well as the start and goal positions,
 
 　Another well-known algorithm for generating mazes is the “digging method.” In this method, a hole is dug from the starting point, and the program advances two squares at a time through unvisited areas. Consequently, the maze must have an odd number of rows and columns. Since this method cannot handle cases where the number of rows or columns is even as specified in config.txt, we determined it would be difficult to apply to this project; therefore, we adopted the DFS algorithm described above.
 
+### Maze Exploration
+To find the shortest path through the maze, I used a method called breadth-first search (BFS). This method finds the shortest path by following the steps below.
+1. Starting from the starting point, look for a location one square away. If there are multiple such locations, register all of them in a dictionary.
+2. Next, search for squares to which the player can move. If there are multiple options, add them all to the dictionary. For example, if two squares are found during the first move, and each of those allows for two possible moves in the next step, a total of four squares will be added to the dictionary during the second move.
+3. If the goal is found, the process ends. Since the process ends as soon as the goal is found along any of the multiple paths, the path along which the goal was found first is the shortest path.
+4. Reconstruct the shortest path by tracing the information recorded in the dictionary.
+
+Another method for finding the shortest path is A* search. While this method can search faster than BFS for large mazes, the algorithm is complex; for small mazes like the one in this project, we determined that BFS is sufficient.
+
 ## Roles
   msumiji: Creating README.md, reviewing and revising the code.
   ssagano: Writing the main body of the code, creating LICENSE.md.
 
 ## Reflections on the Project
 　This team was formed in August. However, since this project involved using a virtual environment, we decided to wait until one of the members had finished “python08,” so we didn’t actually get started until late October. Initially, since msumiji had finished Python08 first, the plan was for msumiji to take the lead on coding. However, since ssagano had a better understanding of the virtual environment, ssagano ended up taking the lead on coding.
-　We struggled to balance eliminating dead ends with avoiding the creation of 3×3 open spaces. For a dead end blocked on three sides, we devised an algorithm that randomly selects and removes one of the three walls, but we also considered whether this might create a 3×3 open space. After drawing diagrams, I found it difficult to conceive of an example where removing a single wall from an overlapping dead-end would create an open space. Furthermore, after actually constructing an incomplete maze, I confirmed that no open spaces were created. Therefore, even without a rigorous proof, I concluded that open spaces cannot be formed.
+　We struggled to balance eliminating dead ends with avoiding the creation of 3×3 open spaces. For a dead end blocked on three sides, we devised an algorithm that randomly selects and removes one of the three walls, but we also considered whether this might create a 3×3 open space. After drawing diagrams, I found it difficult to conceive of an example where removing a single wall from an overlapping dead-end would create an open space. Furthermore, after actually constructing an incomplete maze, I confirmed that no open spaces were created. Therefore, even without a rigorous proof, we concluded that open spaces cannot be formed.
+One area for improvement is making the shortest route easier to understand. Currently, it’s simply indicated by dots, but I think it would be even better if it were shown with arrows to make it clearer. Furthermore, I think it would be even better if the maze route were turned into a video that, when played, guides the player from the start to the finish.
 Additionally, while the use of a virtual environment was strongly recommended for this project, I believe there was no point in using one since I relied solely on Python’s standard library.
 
 # Instruction
@@ -49,8 +61,7 @@ When you run the `install` rule in the Makefile, the `build` and `wheel` package
 make install
 
 ### Activate the virtual environment and build the package
-source .venv/bin/activate
-python -m build
+make build
 
 If the build is successful, a `dist/` directory will be created in the root directory, and a Wheel file will be generated.
 Example: `dist/mazegen-1.0.0-py3-none-any.whl`
@@ -69,6 +80,8 @@ In creating this project, we drew on advice from students who entered the progra
 ・スタートとゴールの位置を表示し、スタートからゴールまでの最短経路を表示する。
 迷路の大きさ、スタート、ゴールの位置はconfig.txt内の値を書き換えることで自由に設定することができます。さらに、config.txt内の"PERFECT"の値を変えることで、迷路を完全迷路（2点間の経路が1つのみ）と不完全迷路（2点間の経路が複数ある）で切り替えることができます。本プロジェクトでは、さらに不完全迷路で袋小路（三方が壁で囲まれた場所）をなくしています（42の文字の場所は除く）。
 
+##　アルゴリズム
+###　迷路生成方法
 　迷路生成は深さ優先探索（DFS）というアルゴリズムを使いました。この手法では、スタート地点から隣接する未訪問のマスへ移動し、移動した方向の壁を取り除いて通路を作ります。このアルゴリズムを本プロジェクトのコードに沿って以下説明します。
 １．全てのマスを壁で初期化する(line 175-178)。
 ２．４２の文字を配置する(line 179,181)。
@@ -81,13 +94,22 @@ In creating this project, we drew on advice from students who entered the progra
 
 　迷路生成の他のアルゴリズムとして有名なものに穴掘り法というのがあります。この手法では、スタート地点から穴を掘って未訪問の箇所を2マスずつ進みます。そのため、迷路の大きさは縦、横ともに奇数でなければならず、config.txtで縦あるいは横の大きさが偶数になった場合に対応できないため、本プロジェクトに適用するのに困難であると考えたため、上記のDFSを採用しました。
 
-役割分担
+###　迷路探索方法
+　迷路の最短経路探索には幅優先探索（BFS）という手法を用いました。この手法以下の手順で最短経路を探します。
+1.スタート地点から始めて、1マス動ける場所を探します。複数あったら複数の場所を辞書に登録します。
+2.次に動けるマスを探します。これも複数あったら複数登録します。例えば1回目の移動で2箇所みつかり、そのそれぞれが次の移動で2箇所動ける場合、2回めの移動では合計4箇所が登録されることになります。
+3.ゴールが見つかったらそこで処理を終了します。複数ある経路の中のいずれかでゴールが見つかったら処理が終了するので、一番最初にゴールが見つかった経路が最短経路となります。
+4.辞書に記録された情報をたどり最短経路を復元します。
+　他の最短経路探索方法として、エースター探索というのがあります。この方法は迷路が大きい場合にはBFSより早く探索できるのですが、アルゴリズムが難解で、今回のプロジェクトのような小さい迷路であればBFSで十分であると判断しました。
+
+##　役割分担
 msumiji：README.mdの作成、コードの確認、修正
 ssagano：全体的なコードの作成、LICENSE.mdの作成
 
 プロジェクトを通しての感想
-　チーム結成は8月に行いました。しかし、本プロジェクトは仮想環境を使うということでしたので、メンバーのうちどちらかがpython08を終わってから行うという方針にし、実際の着手は10月後半になってからです。当初はmsumijiの方が先にpython08を終わらせたので、msumijiがコードの作成の主担当とする予定でしたが、ssaganoの方が仮想環境の理解ができていたので、コードの作成の主担当はssaganoの方が行git@github.com:msumiji/amazing.gitうことになりました。
+　チーム結成は8月に行いました。しかし、本プロジェクトは仮想環境を使うということでしたので、メンバーのうちどちらかがpython08を終わってから行うという方針にし、実際の着手は10月後半になってからです。当初はmsumijiの方が先にpython08を終わらせたので、msumijiがコードの作成の主担当とする予定でしたが、ssaganoの方が仮想環境の理解ができていたので、コードの作成の主担当はssaganoの方が行うことになりました。
 　袋小路（dead-end）を消すことと、3×3のオープンスペースを作らないことを両立させるところは苦労しました。3方が塞がっている袋小路は3個の壁のどれかをランダムに選んで1つを消すというアルゴリズムにしたのですが、このときに3×3のオープンスペースができないかを検討しました。図面を書いて、袋小路が重なっている場所でどれか1つの壁を取り除いてもオープンスペースができる例が考えにくいことや、実際に不完全迷路を作ってみてオープンスペースができないことから、厳密な証明ができなくてもオープンスペースはできないものとしました。
+　改善すべき点としては、最短経路のルートをわかりやすくすること。現状は単に点で示していますが、矢印で示してわかりやすくするとなお良かったと思います。さらには、迷路の経路を動画にして、再生するとスタートからゴールまで到達するようにするとなお良かったと思います。
 　また、本プロジェクトでは、仮想環境を使うことが強く推奨されていましたが、本プロジェクトではpythonの標準ライブラリのみを使ったので仮想環境を使う意味はなかったと思います。
 
 # Instruction
@@ -111,8 +133,7 @@ Makefile の `install` 規則を実行すると、仮想環境内にwheel` パ�
 make install
 
 #### 仮想環境を有効化してパッケージをビルド
-source .venv/bin/activate
-python -m build
+make build
 
 ビルドが成功すると、ルート直下に dist/ ディレクトリが作成され、Wheel ファイルが生成されます。
 生成例: dist/mazegen-1.0.0-py3-none-any.whl
