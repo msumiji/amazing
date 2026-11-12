@@ -1,8 +1,8 @@
 [MAZE]
-WIDTH = 10
-HEIGHT = 10
-PERFECT = True
+WIDTH = 20
+HEIGHT = 20
+PERFECT = False
 ENTRY = 0,0
-OUTPUT_FILE = baka.txt
-EXIT = 7,4
-SEED = 41
+OUTPUT_FILE = maze.txt
+EXIT = 1,1
+SEED = 40

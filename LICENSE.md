@@ -1,3 +1,13 @@
+MIT License
+
+Copyright (c) 2026 msumiji, ssagano
+
+Subject to the terms and conditions set forth below, we grant permission to any person who obtains a copy of this software and its accompanying documentation (hereinafter referred to as the “Software”) to use the Software free of charge. This includes the right to use, copy, modify, combine, publish, distribute, sublicense, and/or sell the Software, as well as the right to grant these rights to anyone to whom the Software is provided.
+
+The above copyright notice and this license notice must be included in all copies or substantial portions of the Software.
+
+The Software is provided “as is,” and no warranty of any kind, whether express or implied, including but not limited to warranties of merchantability, fitness for a particular purpose, and non-infringement, is made. The author or copyright holder shall not be liable for any claims, damages, or other liabilities arising from or related to the Software or the use or other handling of the Software, whether based on contract, tort, or any other theory.
+
 MIT ライセンス
 
 Copyright (c) 2026 msumiji, ssagano

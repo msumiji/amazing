@@ -396,6 +396,11 @@ class MazeGenerator:
                     self.grid[ny][nx] &= ~opp_bit
 
     def validate_entry_exit(self) -> None:
+        if self.entry == self.exit:
+            raise ValueError(
+                f"ENTRY and EXIT coordinates must be different "
+                f"(both are {self.entry})."
+            )
         for name, (x, y) in [
             ("ENTRY", self.entry),
             ("EXIT", self.exit)

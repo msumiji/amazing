@@ -7,6 +7,16 @@ In this project, we will do the following:
 ・Display the start and goal positions, and show the shortest path from the start to the goal.
 You can freely configure the maze size, as well as the start and goal positions, by changing the values in config.txt. Furthermore, by changing the value of “PERFECT” in config.txt, you can toggle between a perfect maze (where there is only one path between any two points) and an imperfect maze (where there are multiple paths between any two points). In this project, dead ends (locations surrounded by walls on three sides) are also eliminated in imperfect mazes (excluding the location of the “42” character).
 
+## About config.txt
+This file configures the parameters for generating a maze.
+WIDTH: The width of the maze
+HEIGHT: The height of the maze
+Setting PERFECT to True generates a perfect maze; setting it to False generates an imperfect maze.
+ENTRY = The coordinates of the starting point
+OUTPUT_FILE = The file that stores the text information of the generated maze.
+EXIT = Coordinates of the exit
+SEED = The number used as the source for random number generation. If the SEED value is the same, the same maze will always be generated; however, selecting “regenerate” with the same SEED value will produce a different maze. The order in which these mazes are generated is always the same when the SEED value is identical.
+
 ## Algorithm
 ### Maze Generation
 　Maze generation uses an algorithm called depth-first search (DFS). In this method, the program moves from the starting point to an adjacent unvisited cell and removes the wall in the direction of movement to create a path. This algorithm is explained below in accordance with the code for this project.
@@ -37,8 +47,12 @@ Another method for finding the shortest path is A* search. While this method can
 ## Reflections on the Project
 　This team was formed in August. However, since this project involved using a virtual environment, we decided to wait until one of the members had finished “python08,” so we didn’t actually get started until late October. Initially, since msumiji had finished Python08 first, the plan was for msumiji to take the lead on coding. However, since ssagano had a better understanding of the virtual environment, ssagano ended up taking the lead on coding.
 　We struggled to balance eliminating dead ends with avoiding the creation of 3×3 open spaces. For a dead end blocked on three sides, we devised an algorithm that randomly selects and removes one of the three walls, but we also considered whether this might create a 3×3 open space. After drawing diagrams, I found it difficult to conceive of an example where removing a single wall from an overlapping dead-end would create an open space. Furthermore, after actually constructing an incomplete maze, I confirmed that no open spaces were created. Therefore, even without a rigorous proof, we concluded that open spaces cannot be formed.
+
+## Strengths and Areas for Improvement
 One area for improvement is making the shortest route easier to understand. Currently, it’s simply indicated by dots, but I think it would be even better if it were shown with arrows to make it clearer. Furthermore, I think it would be even better if the maze route were turned into a video that, when played, guides the player from the start to the finish.
-Additionally, while the use of a virtual environment was strongly recommended for this project, I believe there was no point in using one since I relied solely on Python’s standard library.
+
+## Special Tools Used
+while the use of a virtual environment was strongly recommended for this project, I believe there was no point in using one since I relied solely on Python’s standard library.
 
 # Instruction
 make install: Installs the virtual environment. Run this command first before executing any other commands.
@@ -80,6 +94,18 @@ In creating this project, we drew on advice from students who entered the progra
 ・スタートとゴールの位置を表示し、スタートからゴールまでの最短経路を表示する。
 迷路の大きさ、スタート、ゴールの位置はconfig.txt内の値を書き換えることで自由に設定することができます。さらに、config.txt内の"PERFECT"の値を変えることで、迷路を完全迷路（2点間の経路が1つのみ）と不完全迷路（2点間の経路が複数ある）で切り替えることができます。本プロジェクトでは、さらに不完全迷路で袋小路（三方が壁で囲まれた場所）をなくしています（42の文字の場所は除く）。
 
+## config.txtについて
+このファイルは迷路生成のパラメータを設定します。
+WIDTH:迷路の横幅
+HEIGHT:迷路の縦幅
+PERFECT = Trueにすると完全迷路、Falseにすると不完全迷路が生成されます。
+ENTRY = スタート地点の座標
+OUTPUT_FILE = 生成した迷路のテキスト情報を格納するファイル。
+EXIT = ゴール地点の座標
+SEED = 乱数発生の元となる数値。SEEDの値が同じ場合、必ず同じ迷路が生成されます、ただし、同じSEED値でregenerateを選択すると別の迷路ができます。この迷路が生成される順番はSEED値が同じ場合必ず同一です。
+
+
+
 ##　アルゴリズム
 ###　迷路生成方法
 　迷路生成は深さ優先探索（DFS）というアルゴリズムを使いました。この手法では、スタート地点から隣接する未訪問のマスへ移動し、移動した方向の壁を取り除いて通路を作ります。このアルゴリズムを本プロジェクトのコードに沿って以下説明します。
@@ -106,10 +132,14 @@ In creating this project, we drew on advice from students who entered the progra
 msumiji：README.mdの作成、コードの確認、修正
 ssagano：全体的なコードの作成、LICENSE.mdの作成
 
-プロジェクトを通しての感想
+##　プロジェクトを通しての感想
 　チーム結成は8月に行いました。しかし、本プロジェクトは仮想環境を使うということでしたので、メンバーのうちどちらかがpython08を終わってから行うという方針にし、実際の着手は10月後半になってからです。当初はmsumijiの方が先にpython08を終わらせたので、msumijiがコードの作成の主担当とする予定でしたが、ssaganoの方が仮想環境の理解ができていたので、コードの作成の主担当はssaganoの方が行うことになりました。
 　袋小路（dead-end）を消すことと、3×3のオープンスペースを作らないことを両立させるところは苦労しました。3方が塞がっている袋小路は3個の壁のどれかをランダムに選んで1つを消すというアルゴリズムにしたのですが、このときに3×3のオープンスペースができないかを検討しました。図面を書いて、袋小路が重なっている場所でどれか1つの壁を取り除いてもオープンスペースができる例が考えにくいことや、実際に不完全迷路を作ってみてオープンスペースができないことから、厳密な証明ができなくてもオープンスペースはできないものとしました。
+
+#　良かった点と改善すべき点
 　改善すべき点としては、最短経路のルートをわかりやすくすること。現状は単に点で示していますが、矢印で示してわかりやすくするとなお良かったと思います。さらには、迷路の経路を動画にして、再生するとスタートからゴールまで到達するようにするとなお良かったと思います。
+
+## 利用した特別なツール
 　また、本プロジェクトでは、仮想環境を使うことが強く推奨されていましたが、本プロジェクトではpythonの標準ライブラリのみを使ったので仮想環境を使う意味はなかったと思います。
 
 # Instruction
