@@ -1,33 +1,33 @@
 *This project has been created as part of the 42 curriculum by msumiji and ssagano*
 
 # Description
-In this project, we will do the following:
-・Generate a random maze based on the information specified in config.txt.
-・Place the number “42” in the center of the maze. The maze should be generated so that it avoids this number.
-・Display the start and goal positions, and show the shortest path from the start to the goal.
-You can freely configure the maze size, as well as the start and goal positions, by changing the values in config.txt. Furthermore, by changing the value of “PERFECT” in config.txt, you can toggle between a perfect maze (where there is only one path between any two points) and an imperfect maze (where there are multiple paths between any two points). In this project, dead ends (locations surrounded by walls on three sides) are also eliminated in imperfect mazes (excluding the location of the “42” character).
+In this project, we will do the following:<br>
+・Generate a random maze based on the information specified in config.txt.<br>
+・Place the number “42” in the center of the maze. The maze should be generated so that it avoids this number.<br>
+・Display the start and goal positions, and show the shortest path from the start to the goal.<br>
+In this project, dead ends (locations surrounded by walls on three sides) are also eliminated in imperfect mazes (excluding the location of the “42” character).<br>
 
 ## About config.txt
-This file configures the parameters for generating a maze.
-WIDTH: The width of the maze
-HEIGHT: The height of the maze
-Setting PERFECT to True generates a perfect maze; setting it to False generates an imperfect maze.
-ENTRY = The coordinates of the starting point
-OUTPUT_FILE = The file that stores the text information of the generated maze.
-EXIT = Coordinates of the exit
-SEED = The number used as the source for random number generation. If the SEED value is the same, the same maze will always be generated; however, selecting “regenerate” with the same SEED value will produce a different maze. The order in which these mazes are generated is always the same when the SEED value is identical.
+This file configures the parameters for generating a maze.<br>
+WIDTH: The width of the maze<br>
+HEIGHT: The height of the maze<br>
+Setting PERFECT to True generates a perfect maze; setting it to False generates an imperfect maze.<br>
+ENTRY = The coordinates of the starting point<br>
+OUTPUT_FILE = The file that stores the text information of the generated maze.<br>
+EXIT = Coordinates of the exit<br>
+SEED = The number used as the source for random number generation. If the SEED value is the same, the same maze will always be generated; however, selecting “regenerate” with the same SEED value will produce a different maze. The order in which these mazes are generated is always the same when the SEED value is identical.<br>
 
 ## Algorithm
 ### Maze Generation
-　Maze generation uses an algorithm called depth-first search (DFS). In this method, the program moves from the starting point to an adjacent unvisited cell and removes the wall in the direction of movement to create a path. This algorithm is explained below in accordance with the code for this project.
-1. Initialize all cells as walls (line 175-178).
-2. Place the character “42” (lines 179, 181).
-3. Manage visited cells (line 183-186).
-4. Start DFS from the starting point (lines 196, 197).
-5. Search for adjacent unvisited cells (lines 202–209).
-6. Randomly select one and remove the wall (lines 212–214).
-7. Mark the destination as visited and add it to the stack (lines 215, 216).
-8. If a dead end is reached, return (lines 217, 218).
+　Maze generation uses an algorithm called depth-first search (DFS). In this method, the program moves from the starting point to an adjacent unvisited cell and removes the wall in the direction of movement to create a path. This algorithm is explained below in accordance with the code for this project.<br>
+1. Initialize all cells as walls (line 175-178).<br>
+2. Place the character “42” (lines 179, 181).<br>
+3. Manage visited cells (line 183-186).<br>
+4. Start DFS from the starting point (lines 196, 197).<br>
+5. Search for adjacent unvisited cells (lines 202–209).<br>
+6. Randomly select one and remove the wall (lines 212–214).<br>
+7. Mark the destination as visited and add it to the stack (lines 215, 216).<br>
+8. If a dead end is reached, return (lines 217, 218).<br>
 
 　Another well-known algorithm for generating mazes is the “digging method.” In this method, a hole is dug from the starting point, and the program advances two squares at a time through unvisited areas. Consequently, the maze must have an odd number of rows and columns. Since this method cannot handle cases where the number of rows or columns is even as specified in config.txt, we determined it would be difficult to apply to this project; therefore, we adopted the DFS algorithm described above.
 
@@ -41,12 +41,12 @@ To find the shortest path through the maze, I used a method called breadth-first
 Another method for finding the shortest path is A* search. While this method can search faster than BFS for large mazes, the algorithm is complex; for small mazes like the one in this project, we determined that BFS is sufficient.
 
 ## Roles
-  msumiji: Creating README.md, reviewing and revising the code.
-  ssagano: Writing the main body of the code, creating LICENSE.md.
+  msumiji: Creating README.md, reviewing and revising the code.<br>
+  ssagano: Writing the main body of the code, creating LICENSE.md.<br>
 
 ## Reflections on the Project
-　This team was formed in August. However, since this project involved using a virtual environment, we decided to wait until one of the members had finished “python08,” so we didn’t actually get started until late October. Initially, since msumiji had finished Python08 first, the plan was for msumiji to take the lead on coding. However, since ssagano had a better understanding of the virtual environment, ssagano ended up taking the lead on coding.
-　We struggled to balance eliminating dead ends with avoiding the creation of 3×3 open spaces. For a dead end blocked on three sides, we devised an algorithm that randomly selects and removes one of the three walls, but we also considered whether this might create a 3×3 open space. After drawing diagrams, I found it difficult to conceive of an example where removing a single wall from an overlapping dead-end would create an open space. Furthermore, after actually constructing an incomplete maze, I confirmed that no open spaces were created. Therefore, even without a rigorous proof, we concluded that open spaces cannot be formed.
+　This team was formed in August. However, since this project involved using a virtual environment, we decided to wait until one of the members had finished “python08,” so we didn’t actually get started until late October. Initially, since msumiji had finished Python08 first, the plan was for msumiji to take the lead on coding. However, since ssagano had a better understanding of the virtual environment, ssagano ended up taking the lead on coding.<br>
+　We struggled to balance eliminating dead ends with avoiding the creation of 3×3 open spaces. For a dead end blocked on three sides, we devised an algorithm that randomly selects and removes one of the three walls, but we also considered whether this might create a 3×3 open space. After drawing diagrams, I found it difficult to conceive of an example where removing a single wall from an overlapping dead-end would create an open space. Furthermore, after actually constructing an incomplete maze, I confirmed that no open spaces were created. Therefore, even without a rigorous proof, we concluded that open spaces cannot be formed.<br>
 
 ## Strengths and Areas for Improvement
 One area for improvement is making the shortest route easier to understand. Currently, it’s simply indicated by dots, but I think it would be even better if it were shown with arrows to make it clearer. Furthermore, I think it would be even better if the maze route were turned into a video that, when played, guides the player from the start to the finish.
@@ -88,49 +88,50 @@ pip install dist/mazegen-1.0.0-py3-none-any.whl
 In creating this project, we drew on advice from students who entered the program at the same time as us. We happened to have many opportunities to review a_maze_ing, and during those sessions, they explained the project overview to us. We also utilized AI to write code and design algorithms.
 
 # Description
-　このプロジェクトでは以下のことを行います。
-・config.txtに記載された情報に基づいてランダムに迷路を作る。
-・迷路の中央に"42"の文字を入れる。迷路はこの文字を避けて作るようにする。
-・スタートとゴールの位置を表示し、スタートからゴールまでの最短経路を表示する。
-迷路の大きさ、スタート、ゴールの位置はconfig.txt内の値を書き換えることで自由に設定することができます。さらに、config.txt内の"PERFECT"の値を変えることで、迷路を完全迷路（2点間の経路が1つのみ）と不完全迷路（2点間の経路が複数ある）で切り替えることができます。本プロジェクトでは、さらに不完全迷路で袋小路（三方が壁で囲まれた場所）をなくしています（42の文字の場所は除く）。
+　このプロジェクトでは以下のことを行います。<br>
+・config.txtに記載された情報に基づいてランダムに迷路を作る。<br>
+・迷路の中央に"42"の文字を入れる。迷路はこの文字を避けて作るようにする。<br>
+・スタートとゴールの位置を表示し、スタートからゴールまでの最短経路を表示する。<br>
+本プロジェクトでは、さらに不完全迷路で袋小路（三方が壁で囲まれた場所）をなくしています（42の文字の場所は除く）。<br>
 
 ## config.txtについて
-このファイルは迷路生成のパラメータを設定します。
-WIDTH:迷路の横幅
-HEIGHT:迷路の縦幅
-PERFECT = Trueにすると完全迷路、Falseにすると不完全迷路が生成されます。
-ENTRY = スタート地点の座標
-OUTPUT_FILE = 生成した迷路のテキスト情報を格納するファイル。
-EXIT = ゴール地点の座標
-SEED = 乱数発生の元となる数値。SEEDの値が同じ場合、必ず同じ迷路が生成されます、ただし、同じSEED値でregenerateを選択すると別の迷路ができます。この迷路が生成される順番はSEED値が同じ場合必ず同一です。
+このファイルは迷路生成のパラメータを設定します。<br>
+WIDTH:迷路の横幅<br>
+HEIGHT:迷路の縦幅<br>
+PERFECT = Trueにすると完全迷路、Falseにすると不完全迷路が生成されます。<br>
+ENTRY = スタート地点の座標<br>
+OUTPUT_FILE = 生成した迷路のテキスト情報を格納するファイル。<br>
+EXIT = ゴール地点の座標<br>
+SEED = 乱数発生の元となる数値。SEEDの値が同じ場合、必ず同じ迷路が生成されます、ただし、同じSEED値でregenerateを選択すると別の迷路ができます。この迷路が生成される順番はSEED値が同じ場合必ず同一です。<br>
 
 
 
 ##　アルゴリズム
-###　迷路生成方法
-　迷路生成は深さ優先探索（DFS）というアルゴリズムを使いました。この手法では、スタート地点から隣接する未訪問のマスへ移動し、移動した方向の壁を取り除いて通路を作ります。このアルゴリズムを本プロジェクトのコードに沿って以下説明します。
-１．全てのマスを壁で初期化する(line 175-178)。
-２．４２の文字を配置する(line 179,181)。
-３．訪問済みマスを管理する(line 183-186)。
-４．スタート地点からDFSを開始する(line 196,197)。
-５．隣接する未訪問マスを探す(line 202-209)。
-６．ランダムに1つ選んで壁を取り除く(line 212-214)。
-７．移動先を訪問済みにしてスタックに追加する(line 215,216)。
-８．行き止まりになったら戻る(line 217,218)。
+
+###　迷路生成方法<br>
+　迷路生成は深さ優先探索（DFS）というアルゴリズムを使いました。この手法では、スタート地点から隣接する未訪問のマスへ移動し、移動した方向の壁を取り除いて通路を作ります。このアルゴリズムを本プロジェクトのコードに沿って以下説明します。<br>
+１．全てのマスを壁で初期化する(line 175-178)。<br>
+２．４２の文字を配置する(line 179,181)。<br>
+３．訪問済みマスを管理する(line 183-186)。<br>
+４．スタート地点からDFSを開始する(line 196,197)。<br<>
+５．隣接する未訪問マスを探す(line 202-209)。<br>
+６．ランダムに1つ選んで壁を取り除く(line 212-214)。<br>
+７．移動先を訪問済みにしてスタックに追加する(line 215,216)。<br>
+８．行き止まりになったら戻る(line 217,218)。<br>
 
 　迷路生成の他のアルゴリズムとして有名なものに穴掘り法というのがあります。この手法では、スタート地点から穴を掘って未訪問の箇所を2マスずつ進みます。そのため、迷路の大きさは縦、横ともに奇数でなければならず、config.txtで縦あるいは横の大きさが偶数になった場合に対応できないため、本プロジェクトに適用するのに困難であると考えたため、上記のDFSを採用しました。
 
-###　迷路探索方法
-　迷路の最短経路探索には幅優先探索（BFS）という手法を用いました。この手法以下の手順で最短経路を探します。
-1.スタート地点から始めて、1マス動ける場所を探します。複数あったら複数の場所を辞書に登録します。
-2.次に動けるマスを探します。これも複数あったら複数登録します。例えば1回目の移動で2箇所みつかり、そのそれぞれが次の移動で2箇所動ける場合、2回めの移動では合計4箇所が登録されることになります。
-3.ゴールが見つかったらそこで処理を終了します。複数ある経路の中のいずれかでゴールが見つかったら処理が終了するので、一番最初にゴールが見つかった経路が最短経路となります。
-4.辞書に記録された情報をたどり最短経路を復元します。
-　他の最短経路探索方法として、エースター探索というのがあります。この方法は迷路が大きい場合にはBFSより早く探索できるのですが、アルゴリズムが難解で、今回のプロジェクトのような小さい迷路であればBFSで十分であると判断しました。
+###　迷路探索方法<br>
+　迷路の最短経路探索には幅優先探索（BFS）という手法を用いました。この手法以下の手順で最短経路を探します。<br>
+1.スタート地点から始めて、1マス動ける場所を探します。複数あったら複数の場所を辞書に登録します。<br>
+2.次に動けるマスを探します。これも複数あったら複数登録します。例えば1回目の移動で2箇所みつかり、そのそれぞれが次の移動で2箇所動ける場合、2回めの移動では合計4箇所が登録されることになります。<br>
+3.ゴールが見つかったらそこで処理を終了します。複数ある経路の中のいずれかでゴールが見つかったら処理が終了するので、一番最初にゴールが見つかった経路が最短経路となります。<br>
+4.辞書に記録された情報をたどり最短経路を復元します。<br>
+　他の最短経路探索方法として、エースター探索というのがあります。この方法は迷路が大きい場合にはBFSより早く探索できるのですが、アルゴリズムが難解で、今回のプロジェクトのような小さい迷路であればBFSで十分であると判断しました。<br>
 
-##　役割分担
-msumiji：README.mdの作成、コードの確認、修正
-ssagano：全体的なコードの作成、LICENSE.mdの作成
+##　役割分担<br>
+msumiji：README.mdの作成、コードの確認、修正<br>
+ssagano：全体的なコードの作成、LICENSE.mdの作成<br>
 
 ##　プロジェクトを通しての感想
 　チーム結成は8月に行いました。しかし、本プロジェクトは仮想環境を使うということでしたので、メンバーのうちどちらかがpython08を終わってから行うという方針にし、実際の着手は10月後半になってからです。当初はmsumijiの方が先にpython08を終わらせたので、msumijiがコードの作成の主担当とする予定でしたが、ssaganoの方が仮想環境の理解ができていたので、コードの作成の主担当はssaganoの方が行うことになりました。
