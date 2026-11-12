@@ -44,7 +44,7 @@ Another method for finding the shortest path is A* search. While this method can
   msumiji: Creating README.md, reviewing and revising the code.<br>
   ssagano: Writing the main body of the code, creating LICENSE.md.<br>
 
-## Reflections on the Project
+## Reflections on the Project<br>
 　This team was formed in August. However, since this project involved using a virtual environment, we decided to wait until one of the members had finished “python08,” so we didn’t actually get started until late October. Initially, since msumiji had finished Python08 first, the plan was for msumiji to take the lead on coding. However, since ssagano had a better understanding of the virtual environment, ssagano ended up taking the lead on coding.<br>
 　We struggled to balance eliminating dead ends with avoiding the creation of 3×3 open spaces. For a dead end blocked on three sides, we devised an algorithm that randomly selects and removes one of the three walls, but we also considered whether this might create a 3×3 open space. After drawing diagrams, I found it difficult to conceive of an example where removing a single wall from an overlapping dead-end would create an open space. Furthermore, after actually constructing an incomplete maze, I confirmed that no open spaces were created. Therefore, even without a rigorous proof, we concluded that open spaces cannot be formed.<br>
 
@@ -133,11 +133,11 @@ SEED = 乱数発生の元となる数値。SEEDの値が同じ場合、必ず同
 msumiji：README.mdの作成、コードの確認、修正<br>
 ssagano：全体的なコードの作成、LICENSE.mdの作成<br>
 
-##　プロジェクトを通しての感想
+##　プロジェクトを通しての感想<br>
 　チーム結成は8月に行いました。しかし、本プロジェクトは仮想環境を使うということでしたので、メンバーのうちどちらかがpython08を終わってから行うという方針にし、実際の着手は10月後半になってからです。当初はmsumijiの方が先にpython08を終わらせたので、msumijiがコードの作成の主担当とする予定でしたが、ssaganoの方が仮想環境の理解ができていたので、コードの作成の主担当はssaganoの方が行うことになりました。
 　袋小路（dead-end）を消すことと、3×3のオープンスペースを作らないことを両立させるところは苦労しました。3方が塞がっている袋小路は3個の壁のどれかをランダムに選んで1つを消すというアルゴリズムにしたのですが、このときに3×3のオープンスペースができないかを検討しました。図面を書いて、袋小路が重なっている場所でどれか1つの壁を取り除いてもオープンスペースができる例が考えにくいことや、実際に不完全迷路を作ってみてオープンスペースができないことから、厳密な証明ができなくてもオープンスペースはできないものとしました。
 
-#　良かった点と改善すべき点
+#　良かった点と改善すべき点<br>
 　改善すべき点としては、最短経路のルートをわかりやすくすること。現状は単に点で示していますが、矢印で示してわかりやすくするとなお良かったと思います。さらには、迷路の経路を動画にして、再生するとスタートからゴールまで到達するようにするとなお良かったと思います。
 
 ## 利用した特別なツール
